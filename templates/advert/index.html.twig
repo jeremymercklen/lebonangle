@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des annonces{% endblock %}{% block body %}
+    <h1>Liste des annonces</h1>
+    {% if adverts|length > 0 %}
+        <div>Il y a {{ adverts|length }} annonces au total.</div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Annonce</th>
+                <th>Nombre de photos</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ad in adverts %}
+                <tr>
+                    <td><a href="{{ path('app_advert_show', { id: ad[0].id }) }}">{{ ad[0].title }}</a></td>
+                    <td>{{ ad.photo_count }}</td>
+                    <td>
+                        <form method="post" action="{{ path('app_advert_publish', { id: ad[0].id }) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-success">Publier</button>
+                        </form>
+                        <form method="post" action="{{ path('app_advert_reject', { id: ad[0].id }) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Rejeter</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+            {% if previous is not null %}
+                <a href="{{ path('app_advert_index', { offset: previous }) }}" class="btn btn-primary">Précédent</a>
+            {% endif %}
+            {% if next is not null %}
+                <a href="{{ path('app_advert_index', { offset: next }) }}" class="btn btn-primary">Suivant</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div>Aucune annonce n'a été trouvée.</div>
+    {% endif %}
+{% endblock %}
